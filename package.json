@@ -1,7 +1,7 @@
 {
   "name": "indica-chat",
   "productName": "Indica Chat",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Indica Chat - Modern Windows Desktop Application",
   "main": "main.js",
   "scripts": {
