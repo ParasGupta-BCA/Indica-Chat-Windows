@@ -1,0 +1,66 @@
+{
+  "name": "indica-chat",
+  "productName": "Indica Chat",
+  "version": "1.0.6",
+  "description": "Indica Chat - Modern Windows Desktop Application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder -w",
+    "publish": "electron-builder -w --publish always"
+  },
+  "author": "Indica Chat",
+  "license": "MIT",
+  "dependencies": {
+    "electron-updater": "^6.8.3"
+  },
+  "build": {
+    "appId": "com.indicachat.desktop",
+    "compression": "store",
+    "asar": true,
+    "artifactName": "Indica Chat Setup.exe",
+    "publish": {
+      "provider": "github",
+      "owner": "ParasGupta-BCA",
+      "repo": "Indica-Chat---Windows",
+      "releaseType": "release"
+    },
+    "win": {
+      "target": [
+        { "target": "nsis", "arch": ["x64"] }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "runAfterFinish": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Indica Chat",
+      "deleteAppDataOnUninstall": true,
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "installerSidebar": "build/installerSidebar.bmp",
+      "uninstallerSidebar": "build/installerSidebar.bmp",
+      "include": "installer.nsh"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "ui/**/*",
+      "logo_image/**/*"
+    ],
+    "directories": {
+      "buildResources": "build",
+      "output": "dist2"
+    }
+  },
+  "devDependencies": {
+    "electron": "^41.2.1",
+    "electron-builder": "^26.8.1"
+  }
+}

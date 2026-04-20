@@ -1,0 +1,5 @@
+node_modules/
+dist2/
+dev-app-update.yml
+*.log
+.DS_Store
