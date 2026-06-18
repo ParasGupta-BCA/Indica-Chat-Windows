@@ -119,21 +119,15 @@ export default function App() {
           className="text-5xl md:text-6xl lg:text-7xl text-white mb-8 tracking-tight whitespace-nowrap"
           style={{ fontFamily: "'Instrument Serif', serif" }}
         >
-          Software built for the curious
+          Indica Chat
         </h1>
 
 
         {/* Supporting Text */}
         <p className="text-white text-sm leading-relaxed px-4 max-w-lg mb-8">
-          Experience a powerful platform designed to streamline workflows,
-          accelerate productivity, and help teams build faster with intelligent
-          tools.
+          Your intelligent workspace. Experience a powerful platform designed to streamline communication,
+          accelerate productivity, and collaborate seamlessly.
         </p>
-
-        {/* CTA Button */}
-        <button className="liquid-glass rounded-full px-8 py-3 text-white text-sm font-medium hover:bg-white/5 transition-colors">
-          View Product Manifesto
-        </button>
       </main>
 
       {/* ── Community Footer ─────────────────────────────────────── */}
