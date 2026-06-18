@@ -1,5 +1,4 @@
 import { useRef, useEffect, useCallback } from 'react';
-import { Globe, MessageCircle, AtSign } from 'lucide-react';
 
 const VIDEO_SRC =
   'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_115001_bcdaa3b4-03de-47e7-ad63-ae3e392c32d4.mp4';
@@ -130,30 +129,7 @@ export default function App() {
         </p>
       </main>
 
-      {/* ── Community Footer ─────────────────────────────────────── */}
-      <footer className="relative z-10 flex justify-center gap-4 pb-12">
-        <a
-          href="#"
-          aria-label="Instagram"
-          className="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all"
-        >
-          <MessageCircle size={20} />
-        </a>
-        <a
-          href="#"
-          aria-label="Twitter"
-          className="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all"
-        >
-          <AtSign size={20} />
-        </a>
-        <a
-          href="#"
-          aria-label="Website"
-          className="liquid-glass rounded-full p-4 text-white/80 hover:text-white hover:bg-white/5 transition-all"
-        >
-          <Globe size={20} />
-        </a>
-      </footer>
+
     </div>
   );
 }
