@@ -1,5 +1,5 @@
 import { useRef, useEffect, useCallback } from 'react';
-import { Globe, ArrowRight, MessageCircle, AtSign } from 'lucide-react';
+import { Globe, MessageCircle, AtSign } from 'lucide-react';
 
 const VIDEO_SRC =
   'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_115001_bcdaa3b4-03de-47e7-ad63-ae3e392c32d4.mp4';
@@ -122,17 +122,6 @@ export default function App() {
           Software built for the curious
         </h1>
 
-        {/* Email Input Bar */}
-        <div className="liquid-glass rounded-full pl-6 pr-2 py-2 flex items-center gap-3 w-full max-w-md mb-6">
-          <input
-            type="email"
-            placeholder="Enter your work email"
-            className="bg-transparent outline-none flex-1 text-white placeholder:text-white/40 text-base"
-          />
-          <button className="bg-white rounded-full p-3 text-black flex-shrink-0">
-            <ArrowRight size={20} />
-          </button>
-        </div>
 
         {/* Supporting Text */}
         <p className="text-white text-sm leading-relaxed px-4 max-w-lg mb-8">
