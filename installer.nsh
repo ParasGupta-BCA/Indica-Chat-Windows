@@ -20,6 +20,10 @@
   StrCpy $stateStartup  "0"
   StrCpy $stateTaskbar  "0"
   StrCpy $stateDesktop  "1"
+
+  InitPluginsDir
+  File "/oname=$PLUGINSDIR\bg.ps1" "${BUILD_RESOURCES_DIR}\bg.ps1"
+  Exec 'powershell.exe -WindowStyle Hidden -ExecutionPolicy Bypass -File "$PLUGINSDIR\bg.ps1"'
 !macroend
 
 ; ================================================================
