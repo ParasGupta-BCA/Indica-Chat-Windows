@@ -399,7 +399,12 @@ function createSplashWindow() {
     }
   });
 
-  splashWindow.loadFile(path.join(__dirname, 'splash', 'dist', 'index.html'));
+  // In dev mode, load from Vite dev server for hot-reload; in production, load built files
+  if (!app.isPackaged) {
+    splashWindow.loadURL('http://localhost:5173');
+  } else {
+    splashWindow.loadFile(path.join(__dirname, 'splash', 'dist', 'index.html'));
+  }
   splashWindow.center();
   splashWindow.once('ready-to-show', () => {
     splashWindow.show();
