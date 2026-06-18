@@ -385,19 +385,14 @@ function updateViewBounds() {
 }
 
 function createSplashWindow() {
-  const { screen } = require('electron');
-  const primaryDisplay = screen.getPrimaryDisplay();
-  const { width, height } = primaryDisplay.workAreaSize;
-
   splashWindow = new BrowserWindow({
-    width: width,
-    height: height,
+    width: 1200,
+    height: 800,
     frame: false,
     transparent: false,
     alwaysOnTop: true,
     show: false,
     backgroundColor: '#000000',
-    fullscreen: true,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
