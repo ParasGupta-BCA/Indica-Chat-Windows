@@ -189,6 +189,7 @@ function createWindow() {
     frame: true,
     backgroundColor: '#09090b',
     titleBarStyle: 'hidden',
+    opacity: 0,
     titleBarOverlay: {
       color: '#09090b',
       symbolColor: '#ffffff',
@@ -259,10 +260,25 @@ function setupWebContentsView() {
   // ── Show Main Window & Close Splash when ready ──
   const showMainAndCloseSplash = () => {
     if (splashWindow) {
-      splashWindow.close();
+      const tempSplash = splashWindow;
       splashWindow = null;
+      tempSplash.setAlwaysOnTop(false);
+
       mainWindow.show();
       mainWindow.focus();
+
+      // Smoothly fade in the main window
+      let opacity = 0;
+      const interval = setInterval(() => {
+        opacity += 0.08;
+        if (opacity >= 1) {
+          mainWindow.setOpacity(1);
+          clearInterval(interval);
+          tempSplash.close();
+        } else {
+          mainWindow.setOpacity(opacity);
+        }
+      }, 16);
     }
   };
 
