@@ -110,48 +110,7 @@ export default function App() {
         <source src={VIDEO_SRC} type="video/mp4" />
       </video>
 
-      {/* ── Navigation Bar ───────────────────────────────────────── */}
-      <nav className="relative z-20 pl-6 pr-6 py-6">
-        <div className="liquid-glass rounded-full px-6 py-3 flex items-center justify-between max-w-5xl mx-auto">
-          {/* Left: Logo */}
-          <div className="flex items-center gap-2 text-white">
-            <Globe size={24} />
-            <span className="font-semibold text-lg">Asme</span>
-          </div>
 
-          {/* Center: Nav links */}
-          <div className="hidden md:flex items-center gap-8">
-            <a
-              href="#"
-              className="text-white/80 hover:text-white transition-colors text-sm font-medium"
-            >
-              Platform
-            </a>
-            <a
-              href="#"
-              className="text-white/80 hover:text-white transition-colors text-sm font-medium"
-            >
-              Solutions
-            </a>
-            <a
-              href="#"
-              className="text-white/80 hover:text-white transition-colors text-sm font-medium"
-            >
-              Documentation
-            </a>
-          </div>
-
-          {/* Right: Actions */}
-          <div className="flex items-center gap-4">
-            <button className="text-white text-sm font-medium hidden sm:block">
-              Request Access
-            </button>
-            <button className="liquid-glass rounded-full px-5 py-2 text-white text-sm font-medium">
-              Launch App
-            </button>
-          </div>
-        </div>
-      </nav>
 
       {/* ── Splash Content ───────────────────────────────────────── */}
       <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-12 text-center -translate-y-[20%]">
