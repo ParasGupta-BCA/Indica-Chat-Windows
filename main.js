@@ -385,21 +385,26 @@ function updateViewBounds() {
 }
 
 function createSplashWindow() {
+  const { screen } = require('electron');
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const { width, height } = primaryDisplay.workAreaSize;
+
   splashWindow = new BrowserWindow({
-    width: 650,
-    height: 450,
+    width: width,
+    height: height,
     frame: false,
-    transparent: true,
+    transparent: false,
     alwaysOnTop: true,
     show: false,
     backgroundColor: '#000000',
+    fullscreen: true,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
     }
   });
 
-  splashWindow.loadFile('ui/splash.html');
+  splashWindow.loadFile(path.join(__dirname, 'splash', 'dist', 'index.html'));
   splashWindow.center();
   splashWindow.once('ready-to-show', () => {
     splashWindow.show();

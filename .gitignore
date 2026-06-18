@@ -3,3 +3,4 @@ dist2/
 dev-app-update.yml
 *.log
 .DS_Store
+splash/node_modules/
