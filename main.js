@@ -229,6 +229,7 @@ function setupWebContentsView() {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
+      spellcheck: true,
     }
   });
 
@@ -313,6 +314,109 @@ function setupWebContentsView() {
       return { action: 'deny' };
     }
     return { action: 'deny' };
+  });
+
+  // Handle right-click context menu (Spellcheck corrections, Add to Dictionary, Copy, Paste, etc.)
+  view.webContents.on('context-menu', (event, params) => {
+    const menuTemplate = [];
+
+    // 1. Spellcheck suggestions
+    if (params.misspelledWord) {
+      if (params.dictionarySuggestions && params.dictionarySuggestions.length > 0) {
+        params.dictionarySuggestions.slice(0, 5).forEach((suggestion) => {
+          menuTemplate.push({
+            label: suggestion,
+            click: () => {
+              view.webContents.replaceMisspelling(suggestion);
+            }
+          });
+        });
+      } else {
+        menuTemplate.push({
+          label: 'No spelling suggestions',
+          enabled: false
+        });
+      }
+      
+      menuTemplate.push({
+        label: `Add "${params.misspelledWord}" to Dictionary`,
+        click: () => {
+          view.webContents.session.addWordToSpellCheckerDictionary(params.misspelledWord);
+        }
+      });
+      menuTemplate.push({ type: 'separator' });
+    }
+
+    // 2. Editable text operations (Inputs, textareas)
+    if (params.isEditable) {
+      menuTemplate.push({
+        label: 'Undo',
+        role: 'undo',
+        enabled: params.editFlags.canUndo
+      });
+      menuTemplate.push({
+        label: 'Redo',
+        role: 'redo',
+        enabled: params.editFlags.canRedo
+      });
+      menuTemplate.push({ type: 'separator' });
+      menuTemplate.push({
+        label: 'Cut',
+        role: 'cut',
+        enabled: params.editFlags.canCut
+      });
+      menuTemplate.push({
+        label: 'Copy',
+        role: 'copy',
+        enabled: params.editFlags.canCopy
+      });
+      menuTemplate.push({
+        label: 'Paste',
+        role: 'paste',
+        enabled: params.editFlags.canPaste
+      });
+      menuTemplate.push({ type: 'separator' });
+      menuTemplate.push({
+        label: 'Select All',
+        role: 'selectall',
+        enabled: params.editFlags.canSelectAll
+      });
+    } else {
+      // 3. Non-editable selection operations
+      if (params.selectionText && params.selectionText.trim() !== '') {
+        menuTemplate.push({
+          label: 'Copy',
+          role: 'copy',
+          enabled: params.editFlags.canCopy
+        });
+        menuTemplate.push({
+          label: 'Select All',
+          role: 'selectall',
+          enabled: params.editFlags.canSelectAll
+        });
+      } else {
+        // 4. Default navigation options
+        menuTemplate.push({
+          label: 'Back',
+          enabled: view.webContents.navigationHistory.canGoBack(),
+          click: () => {
+            view.webContents.navigationHistory.goBack();
+          }
+        });
+        menuTemplate.push({
+          label: 'Forward',
+          enabled: view.webContents.navigationHistory.canGoForward(),
+          click: () => {
+            view.webContents.navigationHistory.goForward();
+          }
+        });
+      }
+    }
+
+    if (menuTemplate.length > 0) {
+      const menu = Menu.buildFromTemplate(menuTemplate);
+      menu.popup({ window: mainWindow });
+    }
   });
 
   view.webContents.on('did-start-loading', () => {
