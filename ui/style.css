@@ -544,3 +544,281 @@ body {
   white-space: nowrap;
 }
 .toast-btn-ghost:hover { background: rgba(255,255,255,0.06); color: #a1a1aa; }
+
+/* ═══════════════════════════════════════════════════
+   MANDATORY UPDATE SCREEN
+═══════════════════════════════════════════════════ */
+#mandatory-update-screen {
+  position: fixed;
+  inset: 0;
+  top: 44px;
+  background: #09090b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 850;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+#mandatory-update-screen.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#mandatory-update-screen.hidden {
+  display: none;
+}
+
+.mandatory-card {
+  position: relative;
+  z-index: 10;
+  width: 90%;
+  max-width: 480px;
+  background: rgba(18, 18, 24, 0.88);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 24px;
+  padding: 40px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 50px rgba(168, 85, 247, 0.16);
+  animation: mandatoryCardPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes mandatoryCardPop {
+  0%   { transform: scale(0.92) translateY(12px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.mandatory-logo-wrap {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 22px;
+}
+
+.mandatory-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #7c3aed, #a855f7, #ec4899, #6366f1, #7c3aed);
+  animation: ringRotate 4s linear infinite;
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), white calc(100% - 2px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), white calc(100% - 2px));
+}
+
+.mandatory-logo-img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 0 25px rgba(168, 85, 247, 0.45);
+}
+
+.mandatory-state {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mandatory-state.hidden {
+  display: none;
+}
+
+.mandatory-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.mandatory-pill {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: rgba(236, 72, 153, 0.15);
+  border: 1px solid rgba(236, 72, 153, 0.35);
+  color: #f472b6;
+}
+
+.mandatory-pill.downloading-pill {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.35);
+  color: #c084fc;
+}
+
+.mandatory-pill.ready-pill {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.35);
+  color: #4ade80;
+}
+
+.mandatory-pill.error-pill {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #f87171;
+}
+
+.mandatory-ver-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: #a1a1aa;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 3px 9px;
+  border-radius: 99px;
+}
+
+.mandatory-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: #fafafa;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #ffffff 40%, #e4e4e7 80%, #a855f7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.mandatory-subtitle {
+  font-size: 13px;
+  line-height: 1.55;
+  color: #a1a1aa;
+  margin-bottom: 24px;
+  max-width: 380px;
+}
+
+.mandatory-actions {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.mandatory-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 240px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.45);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s, box-shadow 0.2s;
+}
+
+.mandatory-btn-primary:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.12);
+  box-shadow: 0 8px 28px rgba(168, 85, 247, 0.6);
+}
+
+.mandatory-btn-primary:active {
+  transform: translateY(0);
+}
+
+.mandatory-btn-primary.success {
+  background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+  box-shadow: 0 4px 20px rgba(34, 197, 94, 0.45);
+}
+
+.mandatory-btn-primary.success:hover {
+  box-shadow: 0 8px 28px rgba(34, 197, 94, 0.6);
+}
+
+.mandatory-btn-primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Progress Section */
+.mandatory-progress-container {
+  width: 100%;
+  max-width: 380px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+
+.mandatory-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.mandatory-progress-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #a1a1aa;
+}
+
+.mandatory-progress-percent {
+  font-size: 13px;
+  font-weight: 700;
+  color: #c084fc;
+}
+
+.mandatory-progress-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.mandatory-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #7c3aed, #a855f7, #ec4899);
+  border-radius: 99px;
+  transition: width 0.3s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.mandatory-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -60%;
+  bottom: 0;
+  width: 60%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.mandatory-progress-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: #71717a;
+}
+

@@ -25,4 +25,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Actions from renderer → main
   startUpdateDownload: () => ipcRenderer.send('start-update-download'),
   restartAndInstall: () => ipcRenderer.send('restart-and-install'),
+  checkForUpdates: () => ipcRenderer.send('check-for-updates'),
+  setViewVisible: (visible) => ipcRenderer.send('set-view-visible', visible),
 });

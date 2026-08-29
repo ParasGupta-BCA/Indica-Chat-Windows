@@ -114,12 +114,29 @@ function setupAutoUpdater() {
     });
   }, 3000);
 
+  // Periodic check every 15 minutes
+  setInterval(() => {
+    autoUpdater.checkForUpdates().catch(err => {
+      console.log('[Updater] Periodic check failed:', err.message);
+    });
+  }, 15 * 60 * 1000);
+
+  // ── IPC: renderer triggers update check ──
+  ipcMain.removeAllListeners('check-for-updates');
+  ipcMain.on('check-for-updates', () => {
+    autoUpdater.checkForUpdates().catch(err => {
+      console.log('[Updater] Check failed:', err.message);
+    });
+  });
+
   // ── Update events → forward to renderer ──
   autoUpdater.on('update-available', (info) => {
     if (mainWindow) {
       mainWindow.webContents.send('update-available', {
         version: info.version,
-        releaseDate: info.releaseDate
+        releaseDate: info.releaseDate,
+        releaseNotes: info.releaseNotes,
+        mandatory: true
       });
     }
   });
@@ -472,6 +489,13 @@ function setupWebContentsView() {
   ipcMain.on('banner-hide', () => {
     bannerVisible = false;
     updateViewBounds();
+  });
+
+  ipcMain.removeAllListeners('set-view-visible');
+  ipcMain.on('set-view-visible', (_event, visible) => {
+    if (view && typeof view.setVisible === 'function') {
+      view.setVisible(visible);
+    }
   });
 
   ipcMain.on('toggle-sidebar', () => {

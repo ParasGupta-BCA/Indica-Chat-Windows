@@ -149,8 +149,110 @@
             </div>
         </div>
 
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         MANDATORY UPDATE SCREEN — full screen blocking overlay when update is available
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div id="mandatory-update-screen" class="hidden">
+        <div class="offline-bg">
+            <div class="offline-orb offline-orb-1"></div>
+            <div class="offline-orb offline-orb-2"></div>
+            <div class="offline-orb offline-orb-3"></div>
+            <div class="offline-grain"></div>
+        </div>
+
+        <div class="mandatory-card">
+            <!-- App Icon / Glowing Ring -->
+            <div class="mandatory-logo-wrap">
+                <div class="mandatory-ring"></div>
+                <img src="../logo_image/logo_main.png" alt="Indica Chat" class="mandatory-logo-img">
+            </div>
+
+            <!-- State 1: Update Available -->
+            <div id="mandatory-state-available" class="mandatory-state">
+                <div class="mandatory-badge-row">
+                    <span class="mandatory-pill">Update Required</span>
+                    <span class="mandatory-ver-badge" id="mandatory-update-version">v—</span>
+                </div>
+                <h2 class="mandatory-title">New Version Available</h2>
+                <p class="mandatory-subtitle">
+                    A required update is available for Indica Chat.<br>
+                    Please update to access the latest features and continue using the app.
+                </p>
+                <div class="mandatory-actions">
+                    <button id="btn-mandatory-update" class="mandatory-btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Update Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- State 2: Downloading -->
+            <div id="mandatory-state-downloading" class="mandatory-state hidden">
+                <div class="mandatory-badge-row">
+                    <span class="mandatory-pill downloading-pill">Downloading</span>
+                    <span class="mandatory-ver-badge" id="mandatory-downloading-version">v—</span>
+                </div>
+                <h2 class="mandatory-title">Downloading Update</h2>
+                <p class="mandatory-subtitle">Please wait while the update is downloading automatically...</p>
+                
+                <div class="mandatory-progress-container">
+                    <div class="mandatory-progress-header">
+                        <span class="mandatory-progress-label">Progress</span>
+                        <span class="mandatory-progress-percent" id="mandatory-progress-percent">0%</span>
+                    </div>
+                    <div class="mandatory-progress-track">
+                        <div class="mandatory-progress-fill" id="mandatory-progress-fill"></div>
+                    </div>
+                    <div class="mandatory-progress-footer">
+                        <span id="mandatory-progress-stats">0 MB / 0 MB</span>
+                        <span id="mandatory-progress-speed">Connecting…</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- State 3: Ready to Install / Restarting -->
+            <div id="mandatory-state-ready" class="mandatory-state hidden">
+                <div class="mandatory-badge-row">
+                    <span class="mandatory-pill ready-pill">Ready</span>
+                </div>
+                <h2 class="mandatory-title">Update Ready</h2>
+                <p class="mandatory-subtitle">Restarting Indica Chat to apply the update...</p>
+                <div class="mandatory-actions">
+                    <button id="btn-mandatory-restart" class="mandatory-btn-primary success">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                            <path d="M3 3v5h5"/>
+                        </svg>
+                        Restart & Apply Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- State 4: Download Error -->
+            <div id="mandatory-state-error" class="mandatory-state hidden">
+                <div class="mandatory-badge-row">
+                    <span class="mandatory-pill error-pill">Error</span>
+                </div>
+                <h2 class="mandatory-title">Download Failed</h2>
+                <p class="mandatory-subtitle" id="mandatory-error-msg">
+                    Could not download the update. Please check your internet connection and try again.
+                </p>
+                <div class="mandatory-actions">
+                    <button id="btn-mandatory-retry" class="mandatory-btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                            <path d="M3 3v5h5"/>
+                        </svg>
+                        Retry Download
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- ═══════════════════════════════════════════════════════════════════════ -->
 
     <script src="renderer.js"></script>
 </body>

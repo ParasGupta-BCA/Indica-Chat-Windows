@@ -105,6 +105,10 @@ window.addEventListener('offline', () => {
 window.addEventListener('online', () => {
     isCurrentlyOffline = false;
     hideNetworkBanner();
+    // Check for updates when coming back online
+    if (window.electronAPI && window.electronAPI.checkForUpdates) {
+        window.electronAPI.checkForUpdates();
+    }
     // Auto-reload page when connection restored
     if (splashDismissed) {
         hideOffline();
@@ -146,20 +150,111 @@ window.electronAPI.onLoadError((payload) => {
     }
 });
 
-// ─── Update Toast helpers ─────────────────────────────────────────────────────
+// ─── Mandatory Update Screen elements ─────────────────────────────────────────
+const mandatoryScreen        = document.getElementById('mandatory-update-screen');
+const stateAvailable         = document.getElementById('mandatory-state-available');
+const stateDownloading       = document.getElementById('mandatory-state-downloading');
+const stateReady             = document.getElementById('mandatory-state-ready');
+const stateError             = document.getElementById('mandatory-state-error');
+const updateVersionText      = document.getElementById('mandatory-update-version');
+const downloadingVersionText = document.getElementById('mandatory-downloading-version');
+const btnMandatoryUpdate     = document.getElementById('btn-mandatory-update');
+const btnMandatoryRestart    = document.getElementById('btn-mandatory-restart');
+const btnMandatoryRetry      = document.getElementById('btn-mandatory-retry');
+const progressPercent        = document.getElementById('mandatory-progress-percent');
+const progressFill           = document.getElementById('mandatory-progress-fill');
+const progressStats          = document.getElementById('mandatory-progress-stats');
+const progressSpeed          = document.getElementById('mandatory-progress-speed');
+const mandatoryErrorMsg      = document.getElementById('mandatory-error-msg');
+
+function switchMandatoryState(activeStateEl) {
+    [stateAvailable, stateDownloading, stateReady, stateError].forEach(el => {
+        if (el) el.classList.toggle('hidden', el !== activeStateEl);
+    });
+}
+
+function showMandatoryUpdate(version) {
+    if (version) {
+        if (updateVersionText) updateVersionText.textContent = 'v' + version;
+        if (downloadingVersionText) downloadingVersionText.textContent = 'v' + version;
+    }
+    switchMandatoryState(stateAvailable);
+    if (mandatoryScreen) {
+        mandatoryScreen.classList.remove('hidden');
+        void mandatoryScreen.offsetWidth;
+        mandatoryScreen.classList.add('visible');
+    }
+    // Hide the web contents view so the mandatory update screen is interactive and blocking
+    if (window.electronAPI && window.electronAPI.setViewVisible) {
+        window.electronAPI.setViewVisible(false);
+    }
+}
+
+if (btnMandatoryUpdate) {
+    btnMandatoryUpdate.addEventListener('click', () => {
+        switchMandatoryState(stateDownloading);
+        if (progressFill) progressFill.style.width = '0%';
+        if (progressPercent) progressPercent.textContent = '0%';
+        if (progressStats) progressStats.textContent = 'Starting download…';
+        if (progressSpeed) progressSpeed.textContent = 'Connecting…';
+        if (window.electronAPI && window.electronAPI.startUpdateDownload) {
+            window.electronAPI.startUpdateDownload();
+        }
+    });
+}
+
+if (btnMandatoryRetry) {
+    btnMandatoryRetry.addEventListener('click', () => {
+        switchMandatoryState(stateDownloading);
+        if (progressFill) progressFill.style.width = '0%';
+        if (progressPercent) progressPercent.textContent = '0%';
+        if (progressStats) progressStats.textContent = 'Retrying download…';
+        if (progressSpeed) progressSpeed.textContent = 'Connecting…';
+        if (window.electronAPI && window.electronAPI.startUpdateDownload) {
+            window.electronAPI.startUpdateDownload();
+        }
+    });
+}
+
+if (btnMandatoryRestart) {
+    btnMandatoryRestart.addEventListener('click', () => {
+        btnMandatoryRestart.disabled = true;
+        btnMandatoryRestart.textContent = 'Restarting…';
+        if (window.electronAPI && window.electronAPI.restartAndInstall) {
+            window.electronAPI.restartAndInstall();
+        }
+    });
+}
+
+// ─── Update Toast elements (fallback) ─────────────────────────────────────────
+const updateToast         = document.getElementById('update-toast');
+const toastAvailable      = document.getElementById('toast-available');
+const toastDownloading    = document.getElementById('toast-downloading');
+const toastReady          = document.getElementById('toast-ready');
+const updateVersionBadge  = document.getElementById('update-version-badge');
+const toastPercent        = document.getElementById('toast-percent');
+const toastProgressFill   = document.getElementById('toast-progress-fill');
+const toastSpeed          = document.getElementById('toast-speed');
+const btnStartDownload    = document.getElementById('btn-start-download');
+const btnDismissLater     = document.getElementById('btn-dismiss-later');
+const btnRestartInstall   = document.getElementById('btn-restart-install');
+const btnDismissReady     = document.getElementById('btn-dismiss-ready');
+
 function switchToastState(showEl) {
     [toastAvailable, toastDownloading, toastReady].forEach(el => {
-        el.classList.toggle('hidden', el !== showEl);
+        if (el) el.classList.toggle('hidden', el !== showEl);
     });
 }
 
 function showToast() {
+    if (!updateToast) return;
     updateToast.classList.remove('hidden');
-    void updateToast.offsetWidth; // force reflow for animation
+    void updateToast.offsetWidth;
     updateToast.classList.add('visible');
 }
 
 function hideToast() {
+    if (!updateToast) return;
     updateToast.classList.remove('visible');
     setTimeout(() => updateToast.classList.add('hidden'), 420);
 }
@@ -176,58 +271,78 @@ function formatBytes(bytes) {
 
 // ─── IPC: Auto-updater events ─────────────────────────────────────────────────
 
-// 1. New version found → show "Update Available" state
+// 1. New version found → show mandatory update screen
 window.electronAPI.onUpdateAvailable((info) => {
-    updateVersionBadge.textContent = 'v' + info.version;
+    showMandatoryUpdate(info.version);
+
+    if (updateVersionBadge) updateVersionBadge.textContent = 'v' + info.version;
     switchToastState(toastAvailable);
-    showToast();
 });
 
-// 2. Download in progress → show progress bar
+// 2. Download in progress → update progress bar & stats
 window.electronAPI.onUpdateProgress((progress) => {
-    switchToastState(toastDownloading);
-    // Make sure toast is visible
-    if (updateToast.classList.contains('hidden')) showToast();
+    switchMandatoryState(stateDownloading);
 
     const pct = Math.min(progress.percent, 100);
-    toastProgressFill.style.width = pct + '%';
-    toastPercent.textContent = pct + '%';
-
     const transferred = formatBytes(progress.transferred);
     const total = formatBytes(progress.total);
     const speed = formatSpeed(progress.bytesPerSecond);
-    toastSpeed.textContent = `${transferred} / ${total} · ${speed}`;
+
+    if (progressFill) progressFill.style.width = pct + '%';
+    if (progressPercent) progressPercent.textContent = pct + '%';
+    if (progressStats) progressStats.textContent = `${transferred} / ${total}`;
+    if (progressSpeed) progressSpeed.textContent = speed;
+
+    // Also update toast if visible
+    if (toastProgressFill) toastProgressFill.style.width = pct + '%';
+    if (toastPercent) toastPercent.textContent = pct + '%';
+    if (toastSpeed) toastSpeed.textContent = `${transferred} / ${total} · ${speed}`;
 });
 
-// 3. Download complete → show "Restart & Install" state
+// 3. Download complete → show "Restart & Install" state and automatically apply
 window.electronAPI.onUpdateDownloaded((info) => {
+    switchMandatoryState(stateReady);
     switchToastState(toastReady);
-    if (updateToast.classList.contains('hidden')) showToast();
+
+    // Auto-restart after 1.5 seconds so user sees completion
+    setTimeout(() => {
+        if (window.electronAPI && window.electronAPI.restartAndInstall) {
+            window.electronAPI.restartAndInstall();
+        }
+    }, 1500);
 });
 
-// 4. Update error → silently hide toast & log
+// 4. Update error → display error state on mandatory screen
 window.electronAPI.onUpdateError((msg) => {
     console.warn('[Update] Error:', msg);
+    switchMandatoryState(stateError);
+    if (mandatoryErrorMsg) {
+        mandatoryErrorMsg.textContent = msg || 'Could not download the update. Please check your connection and try again.';
+    }
     hideToast();
 });
 
 // ─── Update Toast button actions ──────────────────────────────────────────────
+if (btnStartDownload) {
+    btnStartDownload.addEventListener('click', () => {
+        showMandatoryUpdate();
+        switchMandatoryState(stateDownloading);
+        window.electronAPI.startUpdateDownload();
+    });
+}
 
-btnStartDownload.addEventListener('click', () => {
-    // Switch to downloading state immediately (feels responsive)
-    toastProgressFill.style.width = '0%';
-    toastPercent.textContent = '0%';
-    toastSpeed.textContent = 'Starting download…';
-    switchToastState(toastDownloading);
-    window.electronAPI.startUpdateDownload();
-});
+if (btnDismissLater) {
+    btnDismissLater.addEventListener('click', () => hideToast());
+}
 
-btnDismissLater.addEventListener('click', () => hideToast());
+if (btnRestartInstall) {
+    btnRestartInstall.addEventListener('click', () => {
+        btnRestartInstall.disabled = true;
+        btnRestartInstall.textContent = 'Restarting…';
+        window.electronAPI.restartAndInstall();
+    });
+}
 
-btnRestartInstall.addEventListener('click', () => {
-    btnRestartInstall.disabled = true;
-    btnRestartInstall.textContent = 'Restarting…';
-    window.electronAPI.restartAndInstall();
-});
-
-btnDismissReady.addEventListener('click', () => hideToast());
+if (btnDismissReady) {
+    btnDismissReady.addEventListener('click', () => hideToast());
+}
