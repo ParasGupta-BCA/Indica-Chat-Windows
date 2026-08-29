@@ -24,7 +24,7 @@
     "publish": {
       "provider": "github",
       "owner": "ParasGupta-BCA",
-      "repo": "Indica-Chat---Windows",
+      "repo": "Indica-Chat-Windows",
       "releaseType": "release"
     },
     "win": {
