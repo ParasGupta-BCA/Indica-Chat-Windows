@@ -256,7 +256,7 @@ function setupWebContentsView() {
   view.webContents.on('before-input-event', handleZoom);
   mainWindow.webContents.on('before-input-event', handleZoom);
 
-  view.webContents.loadURL('https://www.indicachat.in/');
+  view.webContents.loadURL('https://indicachat-v3.vercel.app/');
 
   // ── Show Main Window & Close Splash when ready ──
   const showMainAndCloseSplash = () => {
@@ -309,7 +309,7 @@ function setupWebContentsView() {
   }, 200);
 
   view.webContents.setWindowOpenHandler(({ url }) => {
-    if (!url.includes('indicachat.in')) {
+    if (!url.includes('indicachat-v3.vercel.app') && !url.includes('indicachat.in')) {
       shell.openExternal(url);
       return { action: 'deny' };
     }
